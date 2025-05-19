@@ -20,6 +20,26 @@ helm repo add j6nca https://charts.j6n.dev
 helm install kube-cats j6nca/kube-cats --namespace kube-cats
 ```
 
+## Running Locally
+
+Proxy your Kubernetes API locally:
+
+```
+kubectl proxy --port 8087
+```
+
+Run backend:
+
+```
+go install kube-cat-api
+kube-cat-api
+```
+
+Run frontend:
+
+```
+npm run start
+```
 ## Inspired By
 - [kube-ops-view by hjacobs](https://codeberg.org/hjacobs/kube-ops-view)
 - [flying-k8s by milagrofrost](https://github.com/milagrofrost/Flying-K8s)
