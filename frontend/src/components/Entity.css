@@ -24,6 +24,29 @@ img.node {
     height: 30vh;
 }
 
-/* label {
-    text-align: center;
-} */
+h1, .label {
+    color: white;
+    text-shadow: 1px 1px black;
+}
+
+.label {
+    font-size: 10px;
+}
+
+.watermark {
+    margin: 2em;
+}
+
+h1 {
+    float: left;
+}
+
+.icon {
+    width: 2em;
+    height: 2em;
+    float: right;
+}
+
+.icon:hover {
+    opacity: 50%;
+}

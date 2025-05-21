@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import EntityNode from './components/EntityNode'
 import { motion } from "framer-motion";
+import ghLogo from './assets/misc/github.svg'
 
 // const localNodes = require('./example/nodes.json')
 // const localPods = require('./example/pods.json')
@@ -61,13 +62,19 @@ const App = () => {
   }, []);
 
   return (
-    <div className="app">
+    <div>
+      <div className="watermark">
+        <h1>kube-cats 🐱</h1>
+        <a href="https://github.com/j6nca/kube-cats">
+          <img className="icon" src={ghLogo}></img>
+        </a>
+      </div>
     {nodes.map((node, index) => (
       <motion.div
         key={node.metadata.name || index}
         initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * 100, y: Math.random() * window.innerHeight/4 }}
         animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + 100}}
-        transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+        transition={{ duration: 15, ease: "linear", repeat: Infinity }}
         style={{ position: 'absolute' }}
       >
         <EntityNode node={node} pods={pods.filter(pod => pod.spec.nodeName == node.metadata.name)} index={index}/>
