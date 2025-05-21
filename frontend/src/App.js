@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Node from './components/Node'
+import EntityNode from './components/EntityNode'
+import { motion } from "framer-motion";
 
-const localNodes = require('./example/nodes.json')
-const localPods = require('./example/pods.json')
+// const localNodes = require('./example/nodes.json')
+// const localPods = require('./example/pods.json')
+
 const workspace = "dev"
 const endpoints = {
   "prod" : {
@@ -23,9 +25,15 @@ const fetchKubeInfo = async () => {
     fetch(endpoints[workspace].base + endpoints[workspace].nodes_path),
     fetch(endpoints[workspace].base + endpoints[workspace].pods_path),
   ]);
+  // console.log("nodesResponse: ", nodesResponse)
+  // console.log("podsResponse: ", podsResponse)
+  const nodesJSON = await nodesResponse.json()
+  const podsJSON = await podsResponse.json()
+  // console.log("nodesJSON: ", nodesJSON)
+  // console.log("podsJSON: ", podsJSON)
   return {
-    nodes: nodesResponse.data.items,
-    pods: podsResponse.data.items,
+    nodes: nodesJSON.items,
+    pods: podsJSON.items,
   };
 };
 
@@ -33,86 +41,38 @@ const fetchKubeInfo = async () => {
 const App = () => {
   const [pods, setPods] = useState([]);
   const [nodes, setNodes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-
-  // Function to fetch pods and nodes using fetch
-  const getKubernetesData = async () => {
-    if(workspace != "localtext"){
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Fetch pods data
-        const podsResponse = await fetch(
-          endpoints[workspace].base + endpoints[workspace].pods_path,
-          {}
-        );
-
-        // Check if response is okay
-        if (!podsResponse.ok) {
-          throw new Error("Failed to fetch pods");
-        }
-        const podsData = await podsResponse.json();
-
-        // Fetch nodes data
-        const nodesResponse = await fetch(
-          endpoints[workspace].base + endpoints[workspace].nodes_path,
-          {}
-        );
-
-        // Check if response is okay
-        if (!nodesResponse.ok) {
-          throw new Error("Failed to fetch nodes");
-        }
-        const nodesData = await nodesResponse.json();
-
-        setPods(podsData.items);
-        setNodes(nodesData.items);
-      } catch (error) {
-        console.error("Error fetching data from Kubernetes API:", error);
-      } finally {
-        setLoading(false);
-      }
-    }else{
-      try{
-        const nodesFile = await fetch('example/nodes.json');
-        const podsFile = await fetch('example/pods.json');
-        if (!nodesFile.ok || !podsFile.ok) throw new Error('Local file response was not ok');
-        const localNodes = await nodesFile.json();
-        const localPods = await podsFile.json();
-        setPods(localPods.items);
-        setNodes(localNodes.items);
-      }catch (error) {
-        setError(error.message);
-        console.error("Error fetching data from localtext:", error);
-      }
-    }
-    
-      
-  };
-
-  // Fetch data on component mount
   useEffect(() => {
-    getKubernetesData();
+    const fetchData = async () => {
+      try {
+        const { nodes, pods } = await fetchKubeInfo();
+        setNodes(nodes);
+        setPods(pods);
+        console.log("nodes: ", nodes)
+        console.log("pods: ", pods)
+      } catch (err) {
+        console.error("Error fetching Kubernetes data:", err);
+      }
+    };
 
-    // Set up the interval to query the Kubernetes API every 5 minutes
-    const intervalId = setInterval(fetchKubernetesData, 300000); // 5 minutes in ms
-
-    // Cleanup on unmount
-    return () => clearInterval(intervalId);
+    fetchData();
+    const interval = setInterval(fetchData, 5 * 60 * 1000); // every 5 minutes
+    return () => clearInterval(interval);
   }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
-      <h1>kube-cats</h1>
-        {nodes.map((node) => (
-            <Node node={node} pods={pods.filter(pod => pod.spec.nodeName == node.metadata.name)}/>
-        ))}
+    {nodes.map((node, index) => (
+      <motion.div
+        key={node.metadata.name || index}
+        initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * 100, y: Math.random() * window.innerHeight/4 }}
+        animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + 100}}
+        transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+        style={{ position: 'absolute' }}
+      >
+        <EntityNode node={node} pods={pods.filter(pod => pod.spec.nodeName == node.metadata.name)} index={index}/>
+      </motion.div>
+    ))}
     </div>
   );
 };

@@ -1,0 +1,29 @@
+div.node {
+    /* background-color: rgba(255, 0, 0, 0.5); */
+    text-align: center;
+}
+
+div.pod {
+    /* background-color: rgba(0, 0, 255, 0.5); */
+    position: absolute;
+    text-align: center;
+}
+
+img {
+    display: block;
+    margin: auto;
+}
+
+img.pod {
+    width: 10vh;
+    height: 10vh;
+}
+
+img.node {
+    width: 30vh;
+    height: 30vh;
+}
+
+/* label {
+    text-align: center;
+} */
