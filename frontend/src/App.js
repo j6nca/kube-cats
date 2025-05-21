@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import EntityNode from './components/EntityNode'
 import { motion } from "framer-motion";
 import ghLogo from './assets/misc/github.svg'
+import eye from './assets/misc/eye.svg'
 
 // const localNodes = require('./example/nodes.json')
 // const localPods = require('./example/pods.json')
@@ -42,7 +43,8 @@ const fetchKubeInfo = async () => {
 const App = () => {
   const [pods, setPods] = useState([]);
   const [nodes, setNodes] = useState([]);
-
+  const [showUI, setShowUI] = useState(true);
+  const onClick = () => setShowUI(!showUI)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,10 +66,11 @@ const App = () => {
   return (
     <div>
       <div className="watermark">
-        <h1>kube-cats 🐱</h1>
-        <a href="https://github.com/j6nca/kube-cats">
+        {showUI ? <h1>kube-cats 🐱</h1> : null}
+        <img className="icon show-ui" src={eye} onClick={onClick}></img>
+        {showUI ? <a href="https://github.com/j6nca/kube-cats">
           <img className="icon" src={ghLogo}></img>
-        </a>
+        </a> : null}
       </div>
     {nodes.map((node, index) => (
       <motion.div
