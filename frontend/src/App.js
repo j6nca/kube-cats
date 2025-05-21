@@ -61,7 +61,7 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <div className="app">
     {nodes.map((node, index) => (
       <motion.div
         key={node.metadata.name || index}
