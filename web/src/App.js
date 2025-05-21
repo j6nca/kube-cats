@@ -3,29 +3,18 @@ import EntityNode from './components/EntityNode'
 import { motion } from "framer-motion";
 import ghLogo from './assets/misc/github.svg'
 import eye from './assets/misc/eye.svg'
+import config from './config'
 
 // const localNodes = require('./example/nodes.json')
 // const localPods = require('./example/pods.json')
 
-const workspace = "dev"
-const endpoints = {
-  "prod" : {
-    "base" : "http://localhost:8087",
-    "nodes_path" : "/api/v1/nodes?limit=500",
-    "pods_path" : "/api/v1/pods?limit=500",
-  },
-  
-  "dev" : {
-    "base" : "http://localhost:3030",
-    "nodes_path" : "/nodes",
-    "pods_path" : "/pods",
-  },
-}
+const nodes_path = "/nodes"
+const pods_path = "/pods"
 
 const fetchKubeInfo = async () => {
   const [nodesResponse, podsResponse] = await Promise.all([
-    fetch(endpoints[workspace].base + endpoints[workspace].nodes_path),
-    fetch(endpoints[workspace].base + endpoints[workspace].pods_path),
+    fetch(config.api_url + nodes_path),
+    fetch(config.api_url + pods_path),
   ]);
   // console.log("nodesResponse: ", nodesResponse)
   // console.log("podsResponse: ", podsResponse)

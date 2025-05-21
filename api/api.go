@@ -5,7 +5,22 @@ import (
 	"net/http"
 	"io/ioutil"
    	"log"
+	"time"
+
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	// "encoding/json"
+    metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
+type KubeInfo struct {
+	Nodes interface{} `json:"nodes"`
+	Pods  interface{} `json:"pods"`
+}
+
+var (
+	cachedData KubeInfo
+	dataMutex  sync.RWMutex
 )
 
 const KUBE_API_URL string = "http://localhost:8087"
@@ -88,6 +103,22 @@ func getNodes() string {
 	return nodes
 }
 
+// func getKubeInfo(path string) string {
+// 	resp, err := http.Get(KUBE_API_URL + path)
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 	}
+// 	body, err := ioutil.ReadAll(resp.Body)
+// 	if err != nil {
+// 		log.Fatalln(err)
+// 	}
+// 	//Convert the body to type string
+// 	sb := string(body)
+// 	result := sb
+// 	log.Printf(nodes)
+// 	return result
+// }
+
 func main() {
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/pods", podsHandler)
@@ -97,4 +128,39 @@ func main() {
 	if err := http.ListenAndServe(":3030", nil); err != nil {
 		panic(err)
 	}
+
+	// Initial scrape
+	getKubeInfo(clientset)
+
+	// Scrape every 5 minutes
+	go func() {
+		for {
+			time.Sleep(5 * time.Minute)
+			getKubeInfo(clientset)
+		}
+	}()
+}
+
+func getKubeInfo(clientset *kubernetes.Clientset) {
+	log.Println(" Scraping Kubernetes API...")
+	nodes, err := clientset.CoreV1().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		log.Printf(" Failed to get nodes: %v", err)
+		return
+	}
+
+	pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
+	if err != nil {
+		log.Printf(" Failed to get pods: %v", err)
+		return
+	}
+
+	dataMutex.Lock()
+	cachedData = KubeInfo{
+		Nodes: nodes.Items,
+		Pods:  pods.Items,
+	}
+	dataMutex.Unlock()
+
+	log.Println(" Kubernetes data cached")
 }
