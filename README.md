@@ -1,17 +1,20 @@
 # kube-cats
 
-A fun kubernetes visualizer with pixel cats!
+A fun kubernetes visualizer with pixel cats! 🐱
 
 > [!NOTE] 
 > This project is meant just for fun and should not be used in place of any monitoring/metrics tooling.
 
 ## Goals
 
-- [ ] display various components of the cluster in a read-only, fun, form factor
+- [ x ] display various components of the cluster in a read-only, fun, form factor
 - [ ] semi-randomized asset usage (different combinations of cats)
 - [ ] special cases (based off pod health, etc.)
 
 ## Installation
+
+> [!NOTE] 
+> Not yet ready.
 
 You can install the chart from my [charts repo](https://github.com/j6nca/helm-charts), or make your own.
 
