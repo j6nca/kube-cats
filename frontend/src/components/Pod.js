@@ -1,16 +1,9 @@
+import cat from '../assets/pods/cat1.gif'
+
 function Pod({pod}) {
-  return <div>
-      <li key={pod.metadata.name}>
-      {pod.metadata.name}
-        <ul>
-          <li>
-            {pod.status.phase}
-          </li>
-          <li>
-            {pod.metadata.namespace}
-          </li>
-        </ul>
-      </li>
+  return <div className="pod">
+    <img src={cat}/>
+    <span>{pod.metadata.name}</span>
   </div>;
 }
 

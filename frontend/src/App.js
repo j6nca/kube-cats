@@ -1,7 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Node from './components/Node'
+
 const localNodes = require('./example/nodes.json')
 const localPods = require('./example/pods.json')
+const workspace = "dev"
+const endpoints = {
+  "prod" : {
+    "base" : "http://localhost:8087",
+    "nodes_path" : "/api/v1/nodes?limit=500",
+    "pods_path" : "/api/v1/pods?limit=500",
+  },
+  
+  "dev" : {
+    "base" : "http://localhost:3030",
+    "nodes_path" : "/nodes",
+    "pods_path" : "/pods",
+  },
+}
+
+const fetchKubeInfo = async () => {
+  const [nodesResponse, podsResponse] = await Promise.all([
+    fetch(endpoints[workspace].base + endpoints[workspace].nodes_path),
+    fetch(endpoints[workspace].base + endpoints[workspace].pods_path),
+  ]);
+  return {
+    nodes: nodesResponse.data.items,
+    pods: podsResponse.data.items,
+  };
+};
 
 
 const App = () => {
@@ -9,79 +35,67 @@ const App = () => {
   const [nodes, setNodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const workspace = "dev"
-  const endpoints = {
-    "prod" : {
-      "base" : "http://localhost:8087",
-      "nodes_path" : "/api/v1/nodes?limit=500",
-      "pods_path" : "/api/v1/pods?limit=500",
-    },
-    
-    "dev" : {
-      "base" : "http://localhost:3030",
-      "nodes_path" : "/nodes",
-      "pods_path" : "/pods",
-    },
-  }
+
 
   // Function to fetch pods and nodes using fetch
-  const fetchKubernetesData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const getKubernetesData = async () => {
+    if(workspace != "localtext"){
+      try {
+        setLoading(true);
+        setError(null);
 
-      // Fetch pods data
-      const podsResponse = await fetch(
-        endpoints[workspace].base + endpoints[workspace].pods_path,
-        {}
-      );
+        // Fetch pods data
+        const podsResponse = await fetch(
+          endpoints[workspace].base + endpoints[workspace].pods_path,
+          {}
+        );
 
-      // Check if response is okay
-      if (!podsResponse.ok) {
-        throw new Error("Failed to fetch pods");
-      }
-      const podsData = await podsResponse.json();
-
-      // Fetch nodes data
-      const nodesResponse = await fetch(
-        endpoints[workspace].base + endpoints[workspace].nodes_path,
-        {}
-      );
-
-      // Check if response is okay
-      if (!nodesResponse.ok) {
-        throw new Error("Failed to fetch nodes");
-      }
-      const nodesData = await nodesResponse.json();
-
-      setPods(podsData.items);
-      setNodes(nodesData.items);
-    } catch (error) {
-      try{
-        if(workspace == "dev"){
-          const nodesFile = await fetch('example/nodes.json');
-          const podsFile = await fetch('example/pods.json');
-          if (!nodesFile.ok || !podsFile.ok) throw new Error('Local file response was not ok');
-          const localNodes = await nodesFile.json();
-          const localPods = await podsFile.json();
-          setPods(localPods.items);
-          setNodes(localNodes.items);
-        }else{
-          throw new Error('Not in dev mode, will not resort to local files');
+        // Check if response is okay
+        if (!podsResponse.ok) {
+          throw new Error("Failed to fetch pods");
         }
+        const podsData = await podsResponse.json();
+
+        // Fetch nodes data
+        const nodesResponse = await fetch(
+          endpoints[workspace].base + endpoints[workspace].nodes_path,
+          {}
+        );
+
+        // Check if response is okay
+        if (!nodesResponse.ok) {
+          throw new Error("Failed to fetch nodes");
+        }
+        const nodesData = await nodesResponse.json();
+
+        setPods(podsData.items);
+        setNodes(nodesData.items);
+      } catch (error) {
+        console.error("Error fetching data from Kubernetes API:", error);
+      } finally {
+        setLoading(false);
+      }
+    }else{
+      try{
+        const nodesFile = await fetch('example/nodes.json');
+        const podsFile = await fetch('example/pods.json');
+        if (!nodesFile.ok || !podsFile.ok) throw new Error('Local file response was not ok');
+        const localNodes = await nodesFile.json();
+        const localPods = await podsFile.json();
+        setPods(localPods.items);
+        setNodes(localNodes.items);
       }catch (error) {
         setError(error.message);
-        console.error("Error fetching data from Kubernetes API:", error);
+        console.error("Error fetching data from localtext:", error);
       }
-    } finally {
-      setLoading(false);
     }
+    
       
   };
 
   // Fetch data on component mount
   useEffect(() => {
-    fetchKubernetesData();
+    getKubernetesData();
 
     // Set up the interval to query the Kubernetes API every 5 minutes
     const intervalId = setInterval(fetchKubernetesData, 300000); // 5 minutes in ms
