@@ -1,5 +1,5 @@
 const config = {
-    api_url: process.env.API_URL || 'http://localhost:3030',
+    api_url: process.env.API_URL || 'http://localhost:8001',
     environment: process.env.NODE_ENV || 'development',
     max_pods_per_node: process.env.MAX_PODS_PER_NODE || 10,
     show_labels: process.env.SHOW_LABELS || true,

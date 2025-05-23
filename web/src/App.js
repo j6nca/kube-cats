@@ -12,6 +12,7 @@ const nodes_path = "/nodes"
 const pods_path = "/pods"
 
 const fetchKubeInfo = async () => {
+  console.log("Fetching kube info from ", config.api_url)
   const [nodesResponse, podsResponse] = await Promise.all([
     fetch(config.api_url + nodes_path),
     fetch(config.api_url + pods_path),
@@ -23,8 +24,8 @@ const fetchKubeInfo = async () => {
   // console.log("nodesJSON: ", nodesJSON)
   // console.log("podsJSON: ", podsJSON)
   return {
-    nodes: nodesJSON.items,
-    pods: podsJSON.items,
+    nodes: nodesJSON,
+    pods: podsJSON,
   };
 };
 
