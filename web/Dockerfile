@@ -1,17 +1,6 @@
-FROM node:18-alpine AS builder
-
+FROM node:18-alpine
 WORKDIR /app
-
-# Copy and install dependencies
-COPY package.json package-lock.json ./
-RUN npm ci
-
-# Copy source code
 COPY . .
-RUN npm run build
-
-# Output stage
-FROM alpine:3.18 AS output
-
-WORKDIR /output
-COPY --from=builder /app/build .
+RUN npm install && npm run build && npm install -g serve
+CMD ["serve", "-s", "build"]
+EXPOSE 3000
