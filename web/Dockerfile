@@ -1,5 +1,8 @@
 FROM node:18-alpine as builder
 
+ARG API_URL
+ENV API_URL=http://kube-cats-api
+
 WORKDIR /app
 COPY . .
 RUN npm install && npm run build
