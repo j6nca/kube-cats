@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EntityNode from './components/EntityNode'
+import EntityPod from './components/EntityPod'
 import { motion } from "framer-motion";
 import ghLogo from './assets/misc/github.svg'
 import eye from './assets/misc/eye.svg'
@@ -56,11 +57,11 @@ const App = () => {
   return (
     <div>
       <div className="watermark">
-        {showUI ? <h1>kube-cats 🐱</h1> : null}
-        <img className="icon show-ui" src={eye} onClick={onClick}></img>
-        {showUI ? <a href="https://github.com/j6nca/kube-cats">
+        {/* {showUI ? <h1>kube-cats 🐱</h1> : null} */}
+        {/* <img className="icon show-ui" src={eye} onClick={onClick}></img> */}
+        <a href="https://github.com/j6nca/kube-cats">
           <img className="icon" src={ghLogo}></img>
-        </a> : null}
+        </a>
       </div>
     {nodes.map((node, index) => (
       <motion.div
@@ -69,13 +70,31 @@ const App = () => {
         // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
         // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
         // Starting pos
-        initial={{ x: (-1) * Math.random() * window.innerWidth / 5, y: Math.random() * window.innerHeight * (nodes.length - 1)/nodes.length }}
-        animate={{ x: window.innerWidth + Math.random() * window.innerWidth /5 }}
+        initial={{ x: (-1) * Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight * (nodes.length - 1)/nodes.length }}
+        animate={{ x: window.innerWidth + Math.random() * window.innerWidth /2 }}
         transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity }}
         style={{ position: 'absolute' }}
       >
         <EntityNode node={node} pods={pods.filter(pod => pod.node == node.name)} index={index}/>
       </motion.div>
+    ))}
+    {pods.map((pod, podIndex) => (
+            (podIndex < config.max_pods_per_node) ? 
+            <motion.div
+            key={pod.name || podIndex}
+            // Enable both directions
+            // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
+            // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
+            // Starting pos
+            initial={{ x: (-1) * Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight * (pods.length - 1)/pods.length }}
+            animate={{ x: window.innerWidth + Math.random() * window.innerWidth /2 }}
+            transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity }}
+            style={{ position: 'absolute' }}
+          >
+            <EntityPod key={pod.name || podIndex} pod={pod} podIndex={podIndex} test={config.max_pods_per_node}/>
+          </motion.div>
+            
+             : null
     ))}
     </div>
   );

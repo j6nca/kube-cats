@@ -6,7 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
-  background: radial-gradient(ellipse at bottom, #01112b 0, black 100%);
+  background: linear-gradient(#01112b, black);
   height: 100vh;
 }
 

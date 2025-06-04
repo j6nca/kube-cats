@@ -4,10 +4,17 @@ import (
 	"net/http"
 	"encoding/json"
 	"fmt"
+  "os"
 )
 
 func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+  allowOrigin := "*"
+
+  if os.Getenv("ENVIRONMENT") == "production" {
+    allowOrigin = "https://meow.j6n.dev"
+  }
+    
+	(*w).Header().Set("Access-Control-Allow-Origin", allowOrigin)
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
