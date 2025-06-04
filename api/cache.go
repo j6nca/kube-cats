@@ -15,6 +15,7 @@ import (
 type SimplifiedPod struct {
   Name      string               `json:"name"`
   Namespace string               `json:"namespace"`
+  Node      string               `json:"node"`
   Resources PodResourceSummary `json:"resources"`
 }
 
@@ -102,6 +103,7 @@ func simplifyPods(pods []corev1.Pod) []SimplifiedPod {
     simplifiedPods = append(simplifiedPods, SimplifiedPod{
       Name:      pod.Name,
       Namespace: pod.Namespace,
+      Node:      pod.Spec.NodeName,
       Resources: PodResourceSummary{
         CPURequests:    cpuRequests.String(),
         CPULimits:      cpuLimits.String(),
