@@ -64,13 +64,17 @@ const App = () => {
       </div>
     {nodes.map((node, index) => (
       <motion.div
-        key={node.metadata.name || index}
-        initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * 100, y: Math.random() * window.innerHeight/4 }}
-        animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + 100}}
-        transition={{ duration: 15, ease: "linear", repeat: Infinity }}
+        key={node.name || index}
+        // Enable both directions
+        // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
+        // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
+        // Starting pos
+        initial={{ x: (-1) * Math.random() * window.innerWidth / 5, y: Math.random() * window.innerHeight * (nodes.length - 1)/nodes.length }}
+        animate={{ x: window.innerWidth + Math.random() * window.innerWidth /5 }}
+        transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity }}
         style={{ position: 'absolute' }}
       >
-        <EntityNode node={node} pods={pods.filter(pod => pod.spec.nodeName == node.metadata.name)} index={index}/>
+        <EntityNode node={node} pods={pods.filter(pod => pod.node == node.name)} index={index}/>
       </motion.div>
     ))}
     </div>
