@@ -72,7 +72,7 @@ const App = () => {
         // Starting pos
         initial={{ x: (-1) * Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight * (nodes.length - 1)/nodes.length }}
         animate={{ x: window.innerWidth + Math.random() * window.innerWidth /2 }}
-        transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity }}
+        transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity, repeatType: "reverse"}}
         style={{ position: 'absolute' }}
       >
         <EntityNode node={node} pods={pods.filter(pod => pod.node == node.name)} index={index}/>

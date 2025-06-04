@@ -4,8 +4,8 @@ import ufo from '../assets/nodes/ufo.gif'
 import config from '../config'
 
 function EntityNode({node, pods, index}) {
-  console.log(config)
-  return <div className={`node fly-animation`} style={{ zIndex: `${index * 2}` }}>
+  // console.log(config)
+  return <div className={`node`} style={{ zIndex: `${index * 2}` }}>
     
     <img title={node.name} className="node" src={ufo}/>
     {/* {pods.map((pod, podIndex) => (
@@ -14,7 +14,7 @@ function EntityNode({node, pods, index}) {
              : null
     ))} */}
     <span className="label">{node.name}</span>
-    <span className="label">({pods.length})</span>
+    <span className="label"> ({pods.length})</span>
   </div>;
 }
 
