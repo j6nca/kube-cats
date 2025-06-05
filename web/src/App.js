@@ -89,7 +89,7 @@ const App = () => {
         // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
         // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
         // Starting pos
-        initial={{ x: -offscreen_offset, y: Math.random() * window.innerHeight * 0.75 }}
+        initial={{ x: -offscreen_offset, y: Math.random() * window.innerHeight * 0.6 }}
         animate={{ x: window.innerWidth + offscreen_offset }}
         transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity, repeatType: "mirror"}}
         style={{ position: 'absolute' }}
