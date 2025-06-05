@@ -8,10 +8,8 @@ FROM node:18-alpine
 
 WORKDIR /app
 COPY --from=builder /app/build ./build
-# COPY entrypoint.sh .
 
 RUN npm install -g serve
-# RUN chmod +x entrypoint.sh
 
+CMD ["serve", "-s", "build"]
 EXPOSE 3000
-ENTRYPOINT ["serve -s build -l 3000"]
