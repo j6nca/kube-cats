@@ -5,7 +5,7 @@ import config from '../config'
 
 function EntityNode({node, pods, index}) {
   // console.log(config)
-  return <div className={`node`} style={{ zIndex: `${index * 2}` }}>
+  return <div className={`node`} style={{ zIndex: 1 }}>
     
     <img title={node.name} className="node" src={ufo}/>
     {/* {pods.map((pod, podIndex) => (
