@@ -70,9 +70,9 @@ const App = () => {
         // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
         // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
         // Starting pos
-        initial={{ x: (-1) * Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight * (nodes.length - 1)/nodes.length }}
-        animate={{ x: window.innerWidth + Math.random() * window.innerWidth /2 }}
-        transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity, repeatType: "reverse"}}
+        initial={{ x: -200, y: Math.random() * window.innerHeight * 0.75 }}
+        animate={{ x: window.innerWidth + 200 }}
+        transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity, repeatType: "mirror"}}
         style={{ position: 'absolute' }}
       >
         <EntityNode node={node} pods={pods.filter(pod => pod.node == node.name)} index={index}/>
@@ -86,9 +86,9 @@ const App = () => {
             // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
             // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
             // Starting pos
-            initial={{ x: (-1) * Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight * (pods.length - 1)/pods.length }}
-            animate={{ x: window.innerWidth + Math.random() * window.innerWidth /2 }}
-            transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity }}
+            initial={{ x: -200/*(-1) * Math.random() * window.innerWidth / 2*/, y: Math.random() * window.innerHeight * 0.8 }}
+            animate={{ x: window.innerWidth + 200 /*window.innerWidth + Math.random() * window.innerWidth /2*/ }}
+            transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity , repeatType: "loop"}}
             style={{ position: 'absolute' }}
           >
             <EntityPod key={pod.name || podIndex} pod={pod} podIndex={podIndex} test={config.max_pods_per_node}/>
