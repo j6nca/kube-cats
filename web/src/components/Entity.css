@@ -16,12 +16,12 @@ img {
 
 img.pod {
     width: 10vh;
-    height: 10vh;
+    height: 8vh;
 }
 
 img.node {
-    width: 30vh;
-    height: 30vh;
+    width: 25vh;
+    height: 15vh;
 }
 
 h1, .label {
