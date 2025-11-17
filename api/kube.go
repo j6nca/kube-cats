@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-   	"log"
+  "log"
 	"os"
 
 	"k8s.io/client-go/kubernetes"

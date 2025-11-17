@@ -1,5 +1,8 @@
 # kube-cats
 
+![kube-cats uptime](https://status.j6n.dev/api/v1/endpoints/projects_kube-cats/uptimes/7d/badge.svg)
+![kube-cats health](https://status.j6n.dev/api/v1/endpoints/projects_kube-cats/health/badge.svg)
+
 A fun kubernetes visualizer with pixel cats! 🐱
 
 > [!NOTE] 
@@ -7,8 +10,8 @@ A fun kubernetes visualizer with pixel cats! 🐱
 
 ## Goals
 
-- [ x ] display various components of the cluster in a read-only, fun, form factor
-- [ ] semi-randomized asset usage (different combinations of cats)
+- [x] display various components of the cluster in a read-only, fun, form factor
+- [x] semi-randomized asset usage (different combinations of cats)
 - [ ] special cases (based off pod health, etc.)
 
 ## Installation
