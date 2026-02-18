@@ -25,6 +25,7 @@ func main() {
 	}()
 
 	http.HandleFunc("/health", healthHandler)
+  http.HandleFunc("/test", testHandler)
 	http.HandleFunc("/pods", podsHandler(cache))
 	http.HandleFunc("/nodes", nodesHandler(cache))
 	

@@ -24,7 +24,7 @@ func getClientset() (*kubernetes.Clientset, error) {
 			kubeconfig = fmt.Sprintf("%s/.kube/config", os.Getenv("HOME"))
 		}
 
-		config, err = clientcmd.BuildConfigFromFlags("http://127.0.0.1:8000", kubeconfig) // point to kubectl proxy
+		config, err = clientcmd.BuildConfigFromFlags("http://127.0.0.1:8087", kubeconfig) // point to kubectl proxy
 	} else {
 		log.Println("Running in-cluster")
 		config, err = rest.InClusterConfig()
