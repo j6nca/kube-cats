@@ -40,7 +40,7 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	fmt.Fprintf(w, "This is a test")
+	fmt.Fprintf(w, "This is a test.")
 }
 
 func podsHandler(cache *Cache) http.HandlerFunc {

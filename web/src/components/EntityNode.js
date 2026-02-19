@@ -8,7 +8,9 @@ function EntityNode({node, pods, index}) {
   return <div className={`node`} style={{ zIndex: 1 }}>
     
     <img title={node.name} className="node" src={ufo}/>
-    {/* {pods.map((pod, podIndex) => (
+    
+    {/* Enable to draw pods with nodes */
+    /* {pods.map((pod, podIndex) => (
             (podIndex < config.max_pods_per_node) ? 
             <EntityPod key={pod.name || index} pod={pod} nodeIndex={index} podIndex={podIndex} test={config.max_pods_per_node}/>
              : null
