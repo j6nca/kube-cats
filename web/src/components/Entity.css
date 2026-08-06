@@ -1,6 +1,8 @@
 div.node {
     /* background-color: rgba(255, 0, 0, 0.5); */
     text-align: center;
+    /* Anchor for the fire overlay; div.pod is already positioned. */
+    position: relative;
 }
 
 div.pod {
@@ -22,6 +24,30 @@ img.pod {
 img.node {
     width: 25vh;
     height: 15vh;
+}
+
+/* Fire overlay for entities over the heat threshold. Sits on top of the
+   sprite and ignores pointer events so the sprite keeps its own tooltip
+   and :hover. */
+img.fire {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    image-rendering: pixelated;
+    z-index: 2;
+}
+
+img.fire-pod {
+    width: 5vh;
+    height: 5vh;
+    top: -2vh;
+}
+
+img.fire-node {
+    width: 9vh;
+    height: 9vh;
+    top: -3.5vh;
 }
 
 h1, .label {

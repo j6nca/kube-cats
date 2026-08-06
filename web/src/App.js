@@ -3,7 +3,8 @@ import EntityNode from './components/EntityNode'
 import EntityPod from './components/EntityPod'
 import { motion } from "framer-motion";
 import ghLogo from './assets/misc/github.svg'
-import eye from './assets/misc/eye.svg'
+// Restore alongside the show/hide UI toggle below.
+// import eye from './assets/misc/eye.svg'
 import config from './config'
 
 // const localNodes = require('./example/nodes.json')
@@ -35,8 +36,9 @@ const fetchKubeInfo = async () => {
 const App = () => {
   const [pods, setPods] = useState([]);
   const [nodes, setNodes] = useState([]);
-  const [showUI, setShowUI] = useState(true);
-  const onClick = () => setShowUI(!showUI)
+  // Show/hide UI toggle, disabled along with its controls in the markup below.
+  // const [showUI, setShowUI] = useState(true);
+  // const onClick = () => setShowUI(!showUI)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +53,7 @@ const App = () => {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5 * 60 * 1000); // every 5 minutes
+    const interval = setInterval(fetchData, config.refresh_interval_ms);
     return () => clearInterval(interval);
   }, []);
 
@@ -61,7 +63,7 @@ const App = () => {
         {/* {showUI ? <h1>kube-cats 🐱</h1> : null} */}
         {/* <img className="icon show-ui" src={eye} onClick={onClick}></img> */}
         <a href="https://github.com/j6nca/kube-cats">
-          <img className="icon" src={ghLogo}></img>
+          <img className="icon" src={ghLogo} alt="kube-cats on GitHub"></img>
         </a>
       </div>
     {pods.map((pod, podIndex) => (
@@ -94,7 +96,7 @@ const App = () => {
         transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity, repeatType: "mirror"}}
         style={{ position: 'absolute' }}
       >
-        <EntityNode node={node} pods={pods.filter(pod => pod.node == node.name)} index={index}/>
+        <EntityNode node={node} pods={pods.filter(pod => pod.node === node.name)} index={index}/>
       </motion.div>
     ))}
     </div>

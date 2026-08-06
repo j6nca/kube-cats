@@ -1,0 +1,63 @@
+site_name: kube-cats
+site_description: A fun Kubernetes visualizer with pixel cats
+site_url: https://j6nca.github.io/kube-cats/
+repo_url: https://github.com/j6nca/kube-cats
+repo_name: j6nca/kube-cats
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  icon:
+    logo: material/cat
+  favicon: assets/favicon.ico
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.top
+    - navigation.sections
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - Local development: local-development.md
+  - Configuration: configuration.md
+  - Deployment: deployment.md
+  - Architecture: architecture.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/j6nca/kube-cats

@@ -5,6 +5,8 @@
 
 A fun kubernetes visualizer with pixel cats! 🐱
 
+📖 **[Documentation](https://j6nca.github.io/kube-cats/)**
+
 > [!NOTE] 
 > This project is meant just for fun and should not be used in place of any monitoring/metrics tooling.
 
@@ -12,9 +14,9 @@ A fun kubernetes visualizer with pixel cats! 🐱
 
 - [x] display various components of the cluster in a read-only, fun, form factor
 - [x] semi-randomized asset usage (different combinations of cats)
-- [ ] special cases (based off pod health, etc.)
-- [ ] add support for PV and Gateway resources
-- [ ] fix dynamic configuration
+- [x] special cases (based off pod health, etc.) — pods and nodes over their cpu/memory threshold catch fire
+- [ ] add support for Gateway resources
+- [x] fix dynamic configuration — see [Configuration](https://j6nca.github.io/kube-cats/configuration/)
 
 ## Installation
 
@@ -36,18 +38,26 @@ Proxy your Kubernetes API locally:
 kubectl proxy --port 8087
 ```
 
-Run backend:
+Run backend (from `api/`):
 
 ```
-go install kube-cat-api
-kube-cat-api
+go run .
 ```
 
-Run frontend:
+Run frontend (from `web/`):
 
 ```
+npm install
 npm run start
 ```
+
+Local defaults live in `web/.env`; the frontend points at `http://localhost:8001` out of the box.
+
+> [!TIP]
+> Install [metrics-server](https://github.com/kubernetes-sigs/metrics-server) to get real cpu/memory
+> usage behind the fire sprite. Without it, kube-cats falls back to resource requests and says so in
+> the `pressure.source` field.
+
 ## Inspired By
 - [kube-ops-view by hjacobs](https://codeberg.org/hjacobs/kube-ops-view)
 - [flying-k8s by milagrofrost](https://github.com/milagrofrost/Flying-K8s)

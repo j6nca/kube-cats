@@ -7,6 +7,9 @@ import cat_6 from '../assets/pods/cat_6.gif'
 import cat_7 from '../assets/pods/cat_7.gif'
 import cat_8 from '../assets/pods/cat_8.gif'
 import cat_9 from '../assets/pods/cat_9.gif'
+import fire from '../assets/misc/fire.svg'
+import config from '../config'
+import { isHot, podTooltip } from '../heat'
 
 const cats = [
   cat_1,
@@ -19,10 +22,15 @@ const cats = [
   cat_8,
   cat_9,
 ]
+
 function EntityPod({pod, podIndex}) {
-  return <div className="pod" style={{ zIndex: 0/*zIndex: `${nodeIndex * 2 + (podIndex % 3 > 0 ? 1 : -1)}` , top: `${podIndex/5}%`, left: `${35 + (podIndex % 2 > 0 ? 1 : -1) * Math.random() * (30 + 5) - 5}%`*/}}>
-    <img title={pod.name} className="pod" /*style={{ transform: `scaleX(${podIndex % 2 > 0 ? 1 : -1})` }}*/ src={cats[podIndex % cats.length]}/>
-    <span className="label">{pod.name}</span>
+  const hot = isHot(pod.pressure)
+  const title = config.show_tooltips ? podTooltip(pod) : pod.name
+
+  return <div className="pod" style={{ zIndex: 0 }}>
+    <img title={title} className="pod" src={cats[podIndex % cats.length]} alt={pod.name}/>
+    {hot ? <img className="fire fire-pod" src={fire} alt="" aria-hidden="true"/> : null}
+    {config.show_labels ? <span className="label">{pod.name}</span> : null}
   </div>;
 }
 

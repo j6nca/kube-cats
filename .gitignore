@@ -1,0 +1,5 @@
+# mkdocs build output
+/site
+
+# compiled backend binary
+/api/kube-cat-api

@@ -8,18 +8,35 @@ import (
 	"os"
 )
 
+// scrapeInterval controls how often the Kubernetes API is polled.
+// Override with SCRAPE_INTERVAL as a Go duration, e.g. "30s".
+func scrapeInterval() time.Duration {
+	raw := os.Getenv("SCRAPE_INTERVAL")
+	if raw == "" {
+		return time.Minute
+	}
+
+	d, err := time.ParseDuration(raw)
+	if err != nil || d <= 0 {
+		log.Printf("Invalid SCRAPE_INTERVAL %q, defaulting to 1m", raw)
+		return time.Minute
+	}
+
+	return d
+}
+
 func main() {
 	cache := &Cache{}
-	clientset, err := getClientset()
+	clients, err := getClients()
 	if err != nil {
 		log.Fatalf("Failed to get Kubernetes client: %v", err)
 	}
 
 	go func() {
-		ticker := time.NewTicker(1 * time.Minute)
+		ticker := time.NewTicker(scrapeInterval())
 		defer ticker.Stop()
 		for {
-			getKubeInfo(clientset, cache)
+			getKubeInfo(clients, cache)
 			<-ticker.C
 		}
 	}()
