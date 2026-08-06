@@ -13,6 +13,8 @@ A fun kubernetes visualizer with pixel cats! 🐱
 - [x] display various components of the cluster in a read-only, fun, form factor
 - [x] semi-randomized asset usage (different combinations of cats)
 - [ ] special cases (based off pod health, etc.)
+- [ ] add support for PV and Gateway resources
+- [ ] fix dynamic configuration
 
 ## Installation
 
