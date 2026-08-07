@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import EntityNode from './components/EntityNode'
 import EntityPod from './components/EntityPod'
-import { motion } from "framer-motion";
+import Drifter from './components/Drifter'
 import ghLogo from './assets/misc/github.svg'
 // Restore alongside the show/hide UI toggle below.
 // import eye from './assets/misc/eye.svg'
@@ -12,7 +12,6 @@ import config from './config'
 
 const nodes_path = "/nodes"
 const pods_path = "/pods"
-const offscreen_offset = 500
 
 const fetchKubeInfo = async () => {
   console.log("Fetching kube info from ", config.api_url)
@@ -67,37 +66,29 @@ const App = () => {
         </a>
       </div>
     {pods.map((pod, podIndex) => (
-            (podIndex < config.max_pods) ? 
-            <motion.div
-            key={pod.name || podIndex}
+            (podIndex < config.max_pods) ?
             // Enable both directions
             // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
             // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
-            // Starting pos
-            initial={{ x: -offscreen_offset/*(-1) * Math.random() * window.innerWidth / 2*/, y: Math.random() * window.innerHeight * 0.8 }}
-            animate={{ x: window.innerWidth + offscreen_offset /*window.innerWidth + Math.random() * window.innerWidth /2*/ }}
-            transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity , repeatType: "loop"}}
-            style={{ position: 'absolute' }}
-          >
-            <EntityPod key={pod.name || podIndex} pod={pod} podIndex={podIndex}/>
-          </motion.div>
-            
+            <Drifter
+              key={pod.name || podIndex}
+              id={`${pod.namespace}/${pod.name}`}
+              laneFraction={0.8}
+            >
+              <EntityPod pod={pod} podIndex={podIndex}/>
+            </Drifter>
+
              : null
     ))}
     {nodes.map((node, index) => (
-      <motion.div
+      <Drifter
         key={node.name || index}
-        // Enable both directions
-        // initial={{ x: (index % 2) * window.innerWidth + (index % 2 > 0 ? 1 : -1) * Math.random() * window.innerWidth * 3, y: Math.random() * window.innerHeight/4 }}
-        // animate={{ x: (index + 1) % 2 * window.innerWidth, y: window.innerHeight + Math.random() * window.innerHeight / 2}}
-        // Starting pos
-        initial={{ x: -offscreen_offset, y: Math.random() * window.innerHeight * 0.6 }}
-        animate={{ x: window.innerWidth + offscreen_offset }}
-        transition={{ duration: Math.random() * 30 + 10, ease: "linear", repeat: Infinity, repeatType: "mirror"}}
-        style={{ position: 'absolute' }}
+        id={node.name || `node-${index}`}
+        laneFraction={0.6}
+        mirror
       >
         <EntityNode node={node} pods={pods.filter(pod => pod.node === node.name)} index={index}/>
-      </motion.div>
+      </Drifter>
     ))}
     </div>
   );
