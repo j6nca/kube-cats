@@ -9,6 +9,7 @@ on:
     paths:
       - docs/**
       - mkdocs.yml
+      - docs-requirements.txt
       - .github/workflows/docs.yaml
   # Allows a manual redeploy without an empty commit.
   workflow_dispatch:
@@ -35,9 +36,12 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
+          # setup-python's pip cache needs an explicit dependency file to hash;
+          # it does not find one on its own in a non-Python repo.
+          cache-dependency-path: docs-requirements.txt
 
       - name: Install MkDocs
-        run: pip install mkdocs-material==9.5.49
+        run: pip install -r docs-requirements.txt
 
       # --strict turns broken internal links and bad config into build
       # failures, so they surface here instead of on the published site.

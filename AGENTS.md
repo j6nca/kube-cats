@@ -7,7 +7,7 @@ Guidance for coding agents working in this repository.
 A read-only Kubernetes visualizer that renders pods as pixel cats drifting across the screen and nodes as UFOs. Deliberately not a monitoring tool — accuracy and completeness matter less than it being fun and never mutating the cluster.
 
 Two independently built and deployed components:
-- `api/` — Go 1.24 backend (module `kube-cat-api`), uses `k8s.io/client-go` and `k8s.io/metrics`; `main.go`, `cache.go`, `handlers.go`, `kube.go`, `cache_test.go`
+- `api/` — Go 1.24 backend (module `kube-cat-api`), uses `k8s.io/client-go` and `k8s.io/metrics`; `main.go`, `cache.go`, `handlers.go`, `cors.go`, `kube.go`, plus `cache_test.go`/`cors_test.go`
 - `web/` — React 19 frontend on Create React App (`react-scripts`), animation via `motion`/`framer-motion`; source in `web/src/` (`App.js`, `config.js`, `heat.js`, `components/`, `assets/`, `example/`)
 
 Tool versions are pinned in `.tool-versions` (node 22.15.1, go 1.24). Each component has its own `Dockerfile`; deployment is via a Helm chart in the separate `j6nca/helm-charts` repo. User-facing docs are an MkDocs Material site in `docs/`, published to GitHub Pages.
@@ -59,7 +59,9 @@ kubectl proxy --port 8087
 
 metrics-server is optional everywhere: a nil metrics client or a failed metrics list degrades that scrape to `requests` rather than dropping it.
 
-**Auth mode is env-driven.** `kube.go` treats `ENVIRONMENT != "production"` as dev (kubeconfig via the local proxy) and production as in-cluster (`rest.InClusterConfig`). `handlers.go` keys CORS off the same variable: `*` in dev, `https://meow.j6n.dev` in production.
+**Auth mode is env-driven.** `kube.go` treats `ENVIRONMENT != "production"` as dev (kubeconfig via the local proxy) and production as in-cluster (`rest.InClusterConfig`).
+
+**CORS is a matching-origin echo, not a fixed header** (`cors.go`). `CORS_ALLOW_ORIGINS` is a comma-separated allowlist; a matching request `Origin` is echoed back so several hostnames can share one deployment. Unset falls back to the historical behaviour keyed off `ENVIRONMENT` — `*` in dev, `https://meow.j6n.dev` in production — so leaving it unset changes nothing. A non-match sends no header rather than a wrong one, and `Vary: Origin` is set whenever the response is origin-dependent so caches don't cross-serve.
 
 Endpoints: `GET /health`, `GET /test`, `GET /pods`, `GET /nodes`.
 
@@ -71,7 +73,7 @@ Adding a cat sprite means dropping the gif in `web/src/assets/pods/` and adding 
 
 Three layers, first match wins: `window.__KUBE_CATS_ENV__` (runtime) → `process.env.REACT_APP_*` (build time) → defaults in `config.js`.
 
-The runtime layer exists because CRA inlines `REACT_APP_*` at build time, which freezes a published image to whatever CI had. `web/docker-entrypoint.sh` regenerates `build/env.js` from the container environment on every start, using the same key names **without** the `REACT_APP_` prefix. Unset keys are omitted rather than emitted as empty strings, so they fall through instead of blanking a working default.
+The runtime layer exists because CRA inlines `REACT_APP_*` at build time, which freezes a published image to whatever CI had. `web/docker-entrypoint.sh` regenerates `build/config/env.js` from the container environment on every start, using the same key names **without** the `REACT_APP_` prefix. Unset keys are omitted rather than emitted as empty strings, so they fall through instead of blanking a working default.
 
 When adding a config key you must touch three places: the default in `web/src/config.js`, the `KEYS` list in `web/docker-entrypoint.sh`, and the table in `docs/configuration.md`. Missing the second is the easy mistake — it fails silently, only in containers.
 

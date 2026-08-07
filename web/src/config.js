@@ -1,6 +1,6 @@
 // Configuration is resolved in three layers, first match wins:
 //
-//   1. window.__KUBE_CATS_ENV__  - runtime, written into build/env.js by
+//   1. window.__KUBE_CATS_ENV__  - runtime, written into build/config/env.js by
 //      docker-entrypoint.sh from the container's environment. This is what
 //      makes a single published image configurable per-deployment.
 //   2. process.env.REACT_APP_*   - build time, baked in by Create React App.

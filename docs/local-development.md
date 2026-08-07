@@ -28,7 +28,14 @@ KUBE_PROXY_URL=http://127.0.0.1:8001 go run .
 !!! info "What puts it in dev mode"
     Anything other than `ENVIRONMENT=production`. Dev mode uses your kubeconfig
     via the proxy and allows CORS from any origin; production uses the in-cluster
-    service account and locks CORS to the deployed frontend.
+    service account and restricts CORS. Either default can be overridden with
+    [`CORS_ALLOW_ORIGINS`](configuration.md#cors).
+
+!!! warning "Pointing `npm start` at a deployed API"
+    It will fail CORS, not connection-refused: the page origin is
+    `http://localhost:3000` and a deployed API does not allow it by default.
+    Run the backend locally, or add `http://localhost:3000` to that
+    deployment's `CORS_ALLOW_ORIGINS`.
 
 ## Run the backend
 

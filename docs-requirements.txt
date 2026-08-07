@@ -1,0 +1,4 @@
+# Docs site toolchain. Pinned so the published site does not drift with
+# upstream releases. Used by .github/workflows/docs.yaml and for local
+# `pip install -r docs-requirements.txt && mkdocs serve`.
+mkdocs-material==9.5.49

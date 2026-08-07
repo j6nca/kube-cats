@@ -1,24 +1,28 @@
 package main
 
 import (
-	"net/http"
 	"encoding/json"
 	"fmt"
-  "os"
+	"net/http"
 )
 
-func enableCors(w *http.ResponseWriter) {
-  allowOrigin := "*"
+// enableCors applies the configured policy and reports whether the request was
+// a preflight that has already been answered.
+func enableCors(w http.ResponseWriter, r *http.Request) bool {
+	cors.apply(w, r)
 
-  if os.Getenv("ENVIRONMENT") == "production" {
-    allowOrigin = "https://meow.j6n.dev"
-  }
-    
-	(*w).Header().Set("Access-Control-Allow-Origin", allowOrigin)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return true
+	}
+
+	return false
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	if enableCors(w, r) {
+		return
+	}
 	if r.URL.Path != "/health" {
 		http.NotFound(w, r)
 		return
@@ -31,7 +35,9 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func testHandler(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	if enableCors(w, r) {
+		return
+	}
 	if r.URL.Path != "/test" {
 		http.NotFound(w, r)
 		return
@@ -45,7 +51,9 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 
 func podsHandler(cache *Cache) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		enableCors(&w)
+		if enableCors(w, r) {
+			return
+		}
 
 		cache.RLock()
 		defer cache.RUnlock()
@@ -55,7 +63,9 @@ func podsHandler(cache *Cache) http.HandlerFunc {
 
 func nodesHandler(cache *Cache) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		enableCors(&w)
+		if enableCors(w, r) {
+			return
+		}
 
 		cache.RLock()
 		defer cache.RUnlock()

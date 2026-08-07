@@ -102,3 +102,35 @@ The web image reads its configuration from the environment **at container
 start**, not at build time, so pointing it at a different API is a restart
 rather than a rebuild. See [Configuration](configuration.md) for the full list
 of keys.
+
+!!! warning "API_URL is resolved by the browser"
+    It must be an externally reachable URL, not a cluster-internal Service DNS
+    name. `http://kube-cats-api` works from inside the cluster but means
+    nothing to a browser, which is where this fetch actually runs. Use the
+    hostname your HTTPRoute or Ingress exposes.
+
+### The config volume
+
+The entrypoint writes one file at start-up, `build/config/env.js`. Everything
+else in the image is read-only, so under `readOnlyRootFilesystem: true` that
+single directory needs a writable volume — an `emptyDir` is enough:
+
+```yaml
+securityContext:
+  readOnlyRootFilesystem: true
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000        # makes the emptyDir writable for that uid
+volumes:
+  - name: config
+    emptyDir: {}
+volumeMounts:
+  - name: config
+    mountPath: /app/build/config
+```
+
+Without it the container exits immediately with `cannot write
+/app/build/config/env.js` rather than serving a page with stale or missing
+configuration. Plain `docker run` needs nothing extra — the image ships that
+directory owned by uid 1000.

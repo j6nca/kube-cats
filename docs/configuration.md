@@ -11,15 +11,39 @@ Plain environment variables read at start-up.
 | `KUBECONFIG` | `$HOME/.kube/config` | Kubeconfig path, dev mode only |
 | `KUBE_PROXY_URL` | `http://127.0.0.1:8087` | Where `kubectl proxy` is listening, dev mode only |
 | `SCRAPE_INTERVAL` | `1m` | How often to poll the cluster. Go duration, e.g. `30s`, `5m` |
+| `CORS_ALLOW_ORIGINS` | *(see below)* | Comma-separated browser origins allowed to read the API |
 
 An invalid `SCRAPE_INTERVAL` logs a warning and falls back to `1m` rather than
 failing to start.
+
+### CORS
+
+A matching request `Origin` is echoed back, so several hostnames can share one
+deployment — a single fixed header can only ever satisfy one of them:
+
+```bash
+CORS_ALLOW_ORIGINS=https://meow.j6n.dev,http://kube-cats.j6n.internal
+```
+
+`*` allows everything. An origin that is not listed gets no
+`Access-Control-Allow-Origin` header at all, so the browser blocks the read.
+Requests without an `Origin` (curl, uptime checks) are unaffected — CORS is a
+browser mechanism.
+
+When unset the behaviour is the historical one: `*` in dev, and
+`https://meow.j6n.dev` alone in production.
+
+!!! tip "Developing against a deployed API"
+    Running `npm start` against a remote API fails CORS unless `localhost` is
+    in the list, because the page origin is `http://localhost:3000`. Add it to
+    `CORS_ALLOW_ORIGINS` on that deployment, or just run the backend locally —
+    in dev mode it allows every origin.
 
 ## Frontend
 
 The frontend resolves each setting through three layers, first match wins:
 
-1. **Runtime** — `window.__KUBE_CATS_ENV__`, written into `build/env.js` when the
+1. **Runtime** — `window.__KUBE_CATS_ENV__`, written into `build/config/env.js` when the
    container starts. Keys are used **without** a prefix.
 2. **Build time** — `process.env.REACT_APP_*`, baked in by Create React App.
    Set these in `web/.env` for local development.
@@ -61,7 +85,7 @@ So the image ships an entrypoint that writes the environment into a small
 script the page loads before the bundle:
 
 ```js
-// build/env.js, regenerated on every container start
+// build/config/env.js, regenerated on every container start
 window.__KUBE_CATS_ENV__ = {
   "API_URL": "https://kube-cats-api.example.com",
   "HEAT_THRESHOLD": "0.65",
