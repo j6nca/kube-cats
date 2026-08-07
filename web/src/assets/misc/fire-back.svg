@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 12" shape-rendering="crispEdges" role="img">
+  <title>on fire (behind)</title>
+  <!--
+    The large flame only. Drawn behind the entity sprite so the fire reads as
+    rising from behind it; the two smaller flames live in fire-front.svg and
+    are drawn in front. Both files share this viewBox so the two layers line
+    up when stacked with identical CSS positioning.
+  -->
+  <defs>
+    <g id="flameA">
+      <g fill="#ff7518">
+        <rect x="2" y="0" width="1" height="1"/>
+        <rect x="1" y="1" width="2" height="1"/>
+        <rect x="1" y="2" width="3" height="2"/>
+        <rect x="0" y="4" width="4" height="2"/>
+        <rect x="1" y="6" width="3" height="1"/>
+      </g>
+      <g fill="#ffc93c">
+        <rect x="2" y="3" width="1" height="1"/>
+        <rect x="1" y="4" width="2" height="2"/>
+        <rect x="2" y="6" width="1" height="1"/>
+      </g>
+      <rect x="2" y="5" width="1" height="1" fill="#fff3b0"/>
+    </g>
+
+    <g id="flameB">
+      <g fill="#ff7518">
+        <rect x="2" y="1" width="1" height="1"/>
+        <rect x="1" y="2" width="2" height="1"/>
+        <rect x="1" y="3" width="3" height="1"/>
+        <rect x="0" y="4" width="4" height="2"/>
+        <rect x="1" y="6" width="3" height="1"/>
+      </g>
+      <g fill="#ffc93c">
+        <rect x="2" y="4" width="1" height="1"/>
+        <rect x="1" y="5" width="2" height="1"/>
+        <rect x="2" y="6" width="1" height="1"/>
+      </g>
+      <rect x="2" y="5" width="1" height="1" fill="#fff3b0"/>
+    </g>
+
+    <g id="flameC">
+      <g fill="#ff7518">
+        <rect x="1" y="0" width="1" height="1"/>
+        <rect x="1" y="1" width="2" height="1"/>
+        <rect x="1" y="2" width="3" height="1"/>
+        <rect x="0" y="3" width="4" height="3"/>
+        <rect x="1" y="6" width="3" height="1"/>
+      </g>
+      <g fill="#ffc93c">
+        <rect x="1" y="3" width="2" height="1"/>
+        <rect x="1" y="4" width="2" height="2"/>
+        <rect x="2" y="6" width="1" height="1"/>
+      </g>
+      <rect x="1" y="5" width="1" height="1" fill="#fff3b0"/>
+    </g>
+  </defs>
+
+  <style>
+    /* One frame visible at a time: each is up for a third of the cycle and the
+       starts are a third apart.
+
+       All delays are negative, which starts every frame already part-way
+       through its cycle. With positive delays a frame has not begun at t=0 and
+       falls back to its base opacity of 0, so a flame is blank for the first
+       few frames after paint and the sprite fades in unevenly. */
+    /* Per-flame timing lives here rather than in a style attribute on each
+       group: Create React App runs SVGR over every .svg import, and SVGR turns
+       a style attribute into a JS object, where a custom property becomes an
+       invalid key and fails the build. */
+    .g1 { --dur: 0.36s; --phase: 0s; }
+    .g2 { --dur: 0.27s; --phase: -0.06s; }
+    .g3 { --dur: 0.45s; --phase: -0.03s; }
+
+    .f  { opacity: 0; animation: flick var(--dur) steps(1, end) infinite; }
+    .f1 { animation-delay: calc(var(--phase) - var(--dur)); }
+    .f2 { animation-delay: calc(var(--phase) - var(--dur) / 3 * 2); }
+    .f3 { animation-delay: calc(var(--phase) - var(--dur) / 3); }
+
+    @keyframes flick {
+      0%, 33.32% { opacity: 1; }
+      33.33%, 100% { opacity: 0; }
+    }
+
+    /* Hold a single frame per flame rather than strobing. */
+    @media (prefers-reduced-motion: reduce) {
+      .f { animation: none; }
+      .f1 { opacity: 1; }
+    }
+  </style>
+
+  <g class="g3" transform="translate(9.5 3) scale(1.25)">
+    <use class="f f1" href="#flameC"/>
+    <use class="f f2" href="#flameA"/>
+    <use class="f f3" href="#flameB"/>
+  </g>
+</svg>

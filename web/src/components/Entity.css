@@ -26,32 +26,46 @@ img.node {
     height: 15vh;
 }
 
-/* Fire overlay for entities over the heat threshold. Sits on top of the
-   sprite and ignores pointer events so the sprite keeps its own tooltip
-   and :hover. */
+/* Fire overlay for entities over the heat threshold. Ignores pointer events so
+   the sprite keeps its own tooltip and :hover.
+
+   Two layers share one viewBox and one set of offsets, so they line up exactly:
+   the large flame goes behind the entity, the two small ones in front. */
 img.fire {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     pointer-events: none;
     image-rendering: pixelated;
-    z-index: 2;
 }
 
-/* The sprite is a 24x12 viewBox holding three flames side by side, so these
-   must stay 2:1 or the pixels distort. Width is a little under the entity's
-   own width, to sit along the top of it rather than overhang. */
+img.fire-back { z-index: 0; }
+img.pod, img.node { position: relative; z-index: 1; }
+img.fire-front { z-index: 2; }
+
+/* Each layer is a 24x12 viewBox, so these must stay 2:1 or the pixels distort. */
 img.fire-pod {
     width: 9vh;
     height: 4.5vh;
-    top: -2.5vh;
 }
 
 img.fire-node {
     width: 16vh;
     height: 8vh;
-    top: -4.5vh;
 }
+
+/* The two layers sit at different heights on purpose. The front flames are
+   centred on the sprite, which is what makes the fire look attached to it
+   rather than hovering above. The back flame has to sit higher: it is shorter
+   than the entity, so centred it would be hidden completely behind it, and the
+   whole point of that layer is the tip rising from behind. Offsets are
+   measured against the sprite itself, not the containing div, which is taller
+   because it also holds the label. */
+img.fire-pod.fire-front  { top: 1.75vh; }  /* (8vh sprite - 4.5vh fire) / 2 */
+img.fire-pod.fire-back   { top: -1.5vh; }
+
+img.fire-node.fire-front { top: 3.5vh; }   /* (15vh sprite - 8vh fire) / 2 */
+img.fire-node.fire-back  { top: -4vh; }
 
 h1, .label {
     color: white;

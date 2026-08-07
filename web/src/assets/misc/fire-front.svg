@@ -1,17 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 12" shape-rendering="crispEdges" role="img">
-  <title>on fire</title>
+  <title>on fire (in front)</title>
   <!--
-    Three small flames rather than one big one, so the sprite reads as a fire
-    along the top of an entity instead of a single torch.
-
-    Each flame is the same three pixel frames, shown one at a time. The frames
-    live in defs and each flame references them with a use element, which is
-    what lets the three flicker independently: the animation runs on the use
-    elements, so each flame can carry its own phase and duration as CSS custom
-    properties. Reusing one group directly would lock all three to one beat.
-
-    (Note for editors: XML comments cannot contain a double hyphen, so the
-    custom property names are spelled out in the CSS below rather than here.)
+    The two smaller flames, drawn in front of the entity sprite. The large one
+    is in fire-back.svg and goes behind. Both files share this viewBox so the
+    two layers line up when stacked with identical CSS positioning.
   -->
   <defs>
     <g id="flameA">
@@ -96,23 +88,14 @@
     }
   </style>
 
-  <!-- Different durations as well as offsets, so they drift out of step
-       instead of holding a fixed relative beat. -->
-  <g class="g1" transform="translate(1.5 4)">
+  <g class="g1" transform="translate(3.5 0.5) scale(0.42)">
     <use class="f f1" href="#flameA"/>
     <use class="f f2" href="#flameB"/>
     <use class="f f3" href="#flameC"/>
   </g>
-
-  <g class="g2" transform="translate(9.5 3) scale(1.15)">
+  <g class="g2" transform="translate(16.5 1.5) scale(0.83)">
     <use class="f f1" href="#flameB"/>
     <use class="f f2" href="#flameC"/>
     <use class="f f3" href="#flameA"/>
-  </g>
-
-  <g class="g3" transform="translate(18 4.5) scale(0.9)">
-    <use class="f f1" href="#flameC"/>
-    <use class="f f2" href="#flameA"/>
-    <use class="f f3" href="#flameB"/>
   </g>
 </svg>
