@@ -134,3 +134,33 @@ Without it the container exits immediately with `cannot write
 /app/build/config/env.js` rather than serving a page with stale or missing
 configuration. Plain `docker run` needs nothing extra — the image ships that
 directory owned by uid 1000.
+
+### Caching
+
+`web/public/serve.json` sets the cache headers, and they matter more than they
+look. Everything under `static/` carries a content hash in its filename and is
+served `immutable` for a year. The two files that do **not** have a hash must
+not be cached:
+
+| Path | Header | Why |
+| --- | --- | --- |
+| `config/env.js` | `no-store` | Regenerated every container start. Its URL never changes, so a cached copy pins the page to a previous deployment's settings. |
+| `index.html` | `no-cache` | Points at the current hashed bundles; a cached copy keeps clients on old JS. |
+
+!!! danger "A CDN in front will cache env.js unless told not to"
+    This bit us: Cloudflare cached `config/env.js` for four hours, so a config
+    change reached the cluster but not the browser. **A hard refresh does not
+    help** — the URL is unchanged, so the edge keeps serving its copy even when
+    the client sends `Cache-Control: no-cache`.
+
+    To tell whether a config change is actually live, compare a normal fetch
+    against a cache-busted one:
+
+    ```bash
+    curl -s https://<host>/config/env.js
+    curl -s "https://<host>/config/env.js?cb=$(date +%s)"
+    ```
+
+    If they differ, the origin is correct and you are looking at a stale edge
+    cache: purge that path at the CDN. The `no-store` header above prevents it
+    recurring, but only for deployments made after it ships.

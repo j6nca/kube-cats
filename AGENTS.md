@@ -77,6 +77,8 @@ The runtime layer exists because CRA inlines `REACT_APP_*` at build time, which 
 
 When adding a config key you must touch three places: the default in `web/src/config.js`, the `KEYS` list in `web/docker-entrypoint.sh`, and the table in `docs/configuration.md`. Missing the second is the easy mistake — it fails silently, only in containers.
 
+`config/env.js` and `index.html` are the only build outputs without a content hash in the filename, so `web/public/serve.json` marks them `no-store`/`no-cache` while `static/**` is `immutable`. Do not relax that: a cached `env.js` pins the page to a previous deployment's config, and because its URL never changes a hard refresh cannot clear it — only a CDN purge can. `serve.json` is schema-validated by serve-handler and rejects unknown keys, so it cannot carry comments; the rationale lives in `docs/deployment.md`.
+
 `web/.env` holds local `REACT_APP_*` defaults. It must stay at the `web/` root: CRA does not read a `.env` from `src/`, which is where it used to live and why none of these settings ever took effect.
 
 ## Gotchas
