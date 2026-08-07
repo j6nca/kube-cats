@@ -38,16 +38,19 @@ img.fire {
     z-index: 2;
 }
 
+/* The sprite is a 24x12 viewBox holding three flames side by side, so these
+   must stay 2:1 or the pixels distort. Width is a little under the entity's
+   own width, to sit along the top of it rather than overhang. */
 img.fire-pod {
-    width: 5vh;
-    height: 5vh;
-    top: -2vh;
+    width: 9vh;
+    height: 4.5vh;
+    top: -2.5vh;
 }
 
 img.fire-node {
-    width: 9vh;
-    height: 9vh;
-    top: -3.5vh;
+    width: 16vh;
+    height: 8vh;
+    top: -4.5vh;
 }
 
 h1, .label {
