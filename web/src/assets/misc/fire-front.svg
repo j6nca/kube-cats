@@ -1,9 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 12" shape-rendering="crispEdges" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 24" shape-rendering="crispEdges" role="img">
   <title>on fire (in front)</title>
   <!--
-    The two smaller flames, drawn in front of the entity sprite. The large one
-    is in fire-back.svg and goes behind. Both files share this viewBox so the
-    two layers line up when stacked with identical CSS positioning.
+    The flames in front of the entity: the smallest, and the large one at the
+    base. Drawn after the sprite so they paint over it.
+    The CSS box is pinned to the entity's top edge, so a flame's y here maps
+    straight onto the sprite: y 0 is the top of the entity, y 24 roughly its
+    base. One grid unit is one pixel of the flame art.
+
+    The canvas is wider than the entity (28 units across a box a little wider
+    than the sprite) so a flame can sit at the edge and still overhang it. A
+    flame whose x + width exceeds 28 is silently clipped by the viewBox, which
+    is easy to mistake for the sprite occluding it.
   -->
   <defs>
     <g id="flameA">
@@ -88,14 +95,15 @@
     }
   </style>
 
-  <g class="g1" transform="translate(3.5 0.5) scale(0.42)">
+  <g class="g1" transform="translate(5.5 5.2) scale(0.42)">
     <use class="f f1" href="#flameA"/>
     <use class="f f2" href="#flameB"/>
     <use class="f f3" href="#flameC"/>
   </g>
-  <g class="g2" transform="translate(16.5 1.5) scale(0.83)">
-    <use class="f f1" href="#flameB"/>
-    <use class="f f2" href="#flameC"/>
-    <use class="f f3" href="#flameA"/>
+
+  <g class="g3" transform="translate(11.5 10.6) scale(1.25)">
+    <use class="f f1" href="#flameC"/>
+    <use class="f f2" href="#flameA"/>
+    <use class="f f3" href="#flameB"/>
   </g>
 </svg>

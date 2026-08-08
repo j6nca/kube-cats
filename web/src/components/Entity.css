@@ -30,7 +30,7 @@ img.node {
    the sprite keeps its own tooltip and :hover.
 
    Two layers share one viewBox and one set of offsets, so they line up exactly:
-   the large flame goes behind the entity, the two small ones in front. */
+   one flame goes behind the entity, the other two in front. */
 img.fire {
     position: absolute;
     left: 50%;
@@ -43,29 +43,25 @@ img.fire-back { z-index: 0; }
 img.pod, img.node { position: relative; z-index: 1; }
 img.fire-front { z-index: 2; }
 
-/* Each layer is a 24x12 viewBox, so these must stay 2:1 or the pixels distort. */
+/* Both layers use a 28x24 viewBox pinned to the top of the sprite, so a flame's
+   y in the SVG maps onto the entity and the two layers stay aligned. Placement
+   lives entirely in the SVG, which is why there is only one `top` here.
+
+   The box is deliberately a little wider than the entity so a flame can sit at
+   the edge and overhang it — that is the only way a flame behind the sprite
+   reads at all, since anything fully inside the outline is hidden. Keep the
+   7:6 ratio; anything else skews the pixels. */
+img.fire { top: 0; }
+
 img.fire-pod {
-    width: 9vh;
-    height: 4.5vh;
+    width: 10.5vh;  /* 28 units, matching 9vh / 24 units vertically */
+    height: 9vh;
 }
 
 img.fire-node {
-    width: 16vh;
-    height: 8vh;
+    width: 18.67vh;
+    height: 16vh;
 }
-
-/* The two layers sit at different heights on purpose. The front flames are
-   centred on the sprite, which is what makes the fire look attached to it
-   rather than hovering above. The back flame has to sit higher: it is shorter
-   than the entity, so centred it would be hidden completely behind it, and the
-   whole point of that layer is the tip rising from behind. Offsets are
-   measured against the sprite itself, not the containing div, which is taller
-   because it also holds the label. */
-img.fire-pod.fire-front  { top: 1.75vh; }  /* (8vh sprite - 4.5vh fire) / 2 */
-img.fire-pod.fire-back   { top: -1.5vh; }
-
-img.fire-node.fire-front { top: 3.5vh; }   /* (15vh sprite - 8vh fire) / 2 */
-img.fire-node.fire-back  { top: -4vh; }
 
 h1, .label {
     color: white;
