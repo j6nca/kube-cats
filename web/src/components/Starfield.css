@@ -1,0 +1,55 @@
+.space-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.space-background__glow {
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(ellipse 65% 38% at 68% 37%, rgba(79, 57, 141, .12), transparent 75%),
+    radial-gradient(ellipse 48% 28% at 24% 74%, rgba(39, 91, 130, .09), transparent 80%);
+}
+
+.star-layer {
+  position: absolute;
+  inset: -12% -8%;
+  will-change: transform;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #e8f4ff;
+  box-shadow: 0 0 5px rgba(175, 205, 255, .48);
+  animation: star-shimmer 5s ease-in-out infinite alternate;
+}
+
+.star-layer--far { animation: drift-stars-far 95s linear infinite alternate; }
+.star-layer--mid { animation: drift-stars-mid 65s linear infinite alternate; }
+.star-layer--near { animation: drift-stars-near 40s linear infinite alternate; }
+
+@keyframes drift-stars-far {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-2%, 1%, 0); }
+}
+@keyframes drift-stars-mid {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-5%, 2%, 0); }
+}
+@keyframes drift-stars-near {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-9%, 3%, 0); }
+}
+@keyframes star-shimmer {
+  from { filter: brightness(.8); }
+  to { filter: brightness(1.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-layer, .star { animation: none; }
+}
