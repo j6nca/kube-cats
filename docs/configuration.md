@@ -61,6 +61,8 @@ The frontend resolves each setting through three layers, first match wins:
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `SHOW_FIRE` | `true` | Master switch for the flame overlay |
+| `SHOW_STARS` | `true` | Enable the slowly drifting, layered parallax starfield |
+| `SHOW_NEBULA` | `true` | Enable a faint horizontal galaxy haze through the cats' flight path |
 | `SHOW_LABELS` | `true` | Name label under each sprite |
 | `SHOW_POD_COUNT` | `true` | Pod count next to each node |
 | `SHOW_TOOLTIPS` | `false` | Detailed hover tooltip instead of just the name |

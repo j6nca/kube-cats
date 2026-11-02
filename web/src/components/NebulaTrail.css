@@ -1,0 +1,48 @@
+.nebula-stream {
+  position: fixed;
+  left: -12%;
+  width: 124%;
+  top: 39%;
+  height: 34vh;
+  transform: translateY(-50%);
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .48;
+}
+
+.nebula-stream__haze,
+.nebula-stream__ribbon {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  animation: nebula-stream-flow 65s ease-in-out infinite alternate;
+}
+
+.nebula-stream__haze {
+  background:
+    radial-gradient(ellipse 50% 29% at 30% 46%, rgba(99, 76, 179, .23), transparent 100%),
+    radial-gradient(ellipse 43% 34% at 75% 51%, rgba(46, 106, 162, .20), transparent 100%);
+  filter: blur(22px);
+}
+
+.nebula-stream__ribbon {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(80, 91, 182, .045) 20%,
+    rgba(135, 96, 204, .14) 47%,
+    rgba(55, 117, 166, .1) 76%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 38% at center, black, transparent);
+  filter: blur(18px);
+  animation-duration: 90s;
+}
+
+@keyframes nebula-stream-flow {
+  from { transform: translate3d(-3%, 0, 0); }
+  to { transform: translate3d(3%, -2%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nebula-stream__haze, .nebula-stream__ribbon { animation: none; }
+}

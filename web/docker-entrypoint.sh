@@ -16,7 +16,7 @@ ENV_FILE="${CONFIG_DIR}/env.js"
 
 # Keys the frontend understands. Unset keys are omitted entirely so that
 # src/config.js falls through to its own defaults.
-KEYS="API_URL MAX_PODS REFRESH_INTERVAL_MS HEAT_THRESHOLD SHOW_LABELS SHOW_POD_COUNT SHOW_TOOLTIPS SHOW_FIRE"
+KEYS="API_URL MAX_PODS REFRESH_INTERVAL_MS HEAT_THRESHOLD SHOW_LABELS SHOW_POD_COUNT SHOW_TOOLTIPS SHOW_FIRE SHOW_STARS SHOW_NEBULA"
 
 escape() {
   printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'
