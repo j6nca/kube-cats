@@ -96,3 +96,7 @@ img:hover {
     height: 3em;
     margin: 1.5em;
 }
+
+/* Fixed scene effects render behind the drifting sprites. */
+.space-scene { position: relative; isolation: isolate; min-height: 100vh; }
+.space-scene > .watermark { position: relative; z-index: 10; }
