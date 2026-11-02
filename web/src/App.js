@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import EntityNode from './components/EntityNode'
 import EntityPod from './components/EntityPod'
 import Drifter from './components/Drifter'
+import Starfield from './components/Starfield'
+import NebulaTrail from './components/NebulaTrail'
+import './components/Entity.css'
 import ghLogo from './assets/misc/github.svg'
 // Restore alongside the show/hide UI toggle below.
 // import eye from './assets/misc/eye.svg'
@@ -57,7 +60,9 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <div className="space-scene">
+      {config.show_stars ? <Starfield /> : null}
+      {config.show_nebula ? <NebulaTrail /> : null}
       <div className="watermark">
         {/* {showUI ? <h1>kube-cats 🐱</h1> : null} */}
         {/* <img className="icon show-ui" src={eye} onClick={onClick}></img> */}
