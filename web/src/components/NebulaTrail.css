@@ -1,48 +1,48 @@
-.nebula-trail {
-  position: absolute;
-  right: 50%;
-  top: 10%;
-  width: clamp(90px, 17vw, 280px);
-  height: clamp(22px, 6vh, 80px);
-  transform: translateY(-10%);
+.nebula-stream {
+  position: fixed;
+  left: -12%;
+  width: 124%;
+  top: 39%;
+  height: 34vh;
+  transform: translateY(-50%);
+  overflow: hidden;
+  z-index: 0;
   pointer-events: none;
-  z-index: -1;
   opacity: .48;
 }
 
-.nebula-trail__mist,
-.nebula-trail__core {
+.nebula-stream__haze,
+.nebula-stream__ribbon {
   position: absolute;
   inset: 0;
-  display: block;
-  border-radius: 50%;
-  transform-origin: right center;
-  animation: nebula-breathe 7s ease-in-out infinite alternate;
+  will-change: transform;
+  animation: nebula-stream-flow 65s ease-in-out infinite alternate;
 }
 
-.nebula-trail__mist {
-  background: radial-gradient(ellipse at 80% 50%,
-    rgba(112, 82, 207, .34) 0%,
-    rgba(81, 116, 211, .22) 27%,
-    rgba(51, 101, 172, .08) 55%,
-    transparent 78%);
-  filter: blur(13px);
+.nebula-stream__haze {
+  background:
+    radial-gradient(ellipse 50% 29% at 30% 46%, rgba(99, 76, 179, .23), transparent 100%),
+    radial-gradient(ellipse 43% 34% at 75% 51%, rgba(46, 106, 162, .20), transparent 100%);
+  filter: blur(22px);
 }
 
-.nebula-trail__core {
-  inset: 28% 1% 28% 8%;
+.nebula-stream__ribbon {
   background: linear-gradient(90deg,
-    transparent 0%, rgba(79, 129, 224, .025) 28%,
-    rgba(138, 95, 215, .25) 75%,
-    rgba(185, 158, 244, .11) 100%);
-  filter: blur(8px);
+    transparent 0%,
+    rgba(80, 91, 182, .045) 20%,
+    rgba(135, 96, 204, .14) 47%,
+    rgba(55, 117, 166, .1) 76%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 38% at center, black, transparent);
+  filter: blur(18px);
+  animation-duration: 90s;
 }
 
-@keyframes nebula-breathe {
-  from { transform: scaleY(.85); opacity: .65; }
-  to { transform: scaleY(1.12); opacity: 1; }
+@keyframes nebula-stream-flow {
+  from { transform: translate3d(-3%, 0, 0); }
+  to { transform: translate3d(3%, -2%, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nebula-trail__mist, .nebula-trail__core { animation: none; }
+  .nebula-stream__haze, .nebula-stream__ribbon { animation: none; }
 }
