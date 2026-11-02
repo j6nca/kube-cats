@@ -96,3 +96,11 @@ test('survives an API failure without crashing', async () => {
   await waitFor(() => expect(console.error).toHaveBeenCalled());
   expect(container.querySelectorAll('img.pod')).toHaveLength(0);
 });
+
+test('renders one central nebula with the parallax starfield', async () => {
+  mockApi({ nodes: [], pods: [pod('cat-a', 'node-a', cool), pod('cat-b', 'node-a', cool)] });
+  render(<App />);
+  await waitFor(() => expect(screen.getByAltText('cat-a')).toBeInTheDocument());
+  expect(screen.getByTestId('starfield')).toBeInTheDocument();
+  expect(screen.getAllByTestId('nebula-trail')).toHaveLength(1);
+});
