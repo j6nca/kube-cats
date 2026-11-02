@@ -45,6 +45,8 @@ const config = {
   show_pod_count: bool('SHOW_POD_COUNT', true),
   show_tooltips: bool('SHOW_TOOLTIPS', false),
   show_fire: bool('SHOW_FIRE', true),
+  show_stars: bool('SHOW_STARS', true),
+  show_nebula: bool('SHOW_NEBULA', true),
 };
 
 export default config;
